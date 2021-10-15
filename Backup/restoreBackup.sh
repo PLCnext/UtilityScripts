@@ -1,4 +1,10 @@
 #!/bin/bash
+# ******************************************************************************
+# *
+# * Copyright (c) 2021 Phoenix Contact GmbH & Co. KG. All rights reserved.
+# * Licensed under the MIT. See LICENSE file in the project root for full license information.
+# *
+# ******************************************************************************
 CURRENT=$(pwd)
 TargetDirectory="$1"
 BackupLocation="$2"
@@ -49,8 +55,8 @@ do
         ;;
 
         "Exit")               
-                exit 1        
-                break
+            exit 1        
+            break
         ;;
 
         *) echo "invalid option $REPLY";;

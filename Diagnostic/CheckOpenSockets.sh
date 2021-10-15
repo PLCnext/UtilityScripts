@@ -1,4 +1,10 @@
 #!/bin/bash
+# ******************************************************************************
+# *
+# * Copyright (c) 2021 Phoenix Contact GmbH & Co. KG. All rights reserved.
+# * Licensed under the MIT. See LICENSE file in the project root for full license information.
+# *
+# ******************************************************************************
 PORT="$1"
 TYPE="$2" 
 
@@ -24,8 +30,7 @@ if [ "$(whoami)" = "root" ]; then
 	ps -ef | grep ${PID} | grep -v "grep" >> ${LOGFILE} && tail -n 1 ${LOGFILE};
 	echo "^^^^^^This Application is using the specified port"
 else
-        echo "To check which application is using a specific port: run as root"
-
+    echo "To check which application is using a specific port: run as root"
 fi
 
 chown admin:plcnext ${LOGFILE}
