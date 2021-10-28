@@ -5,7 +5,7 @@
 # * Licensed under the MIT. See LICENSE file in the project root for full license information.
 # *
 # ******************************************************************************/
-rauc status
+rauc status --detailed
 
 df -ha | grep rw
 df -ha | grep ro
