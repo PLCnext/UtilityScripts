@@ -7,6 +7,12 @@
 # ******************************************************************************
 NEWTIMEZONE="Europe/Berlin"
 
+if [[ ! -f /usr/share/zoneinfo/${NEWTIMEZONE} ]] ; then
+echo "File Does not Exist"
+ls -la  /usr/share/zoneinfo/${NEWTIMEZONE}
+exit
+fi
+
 ## Print current Timezone:
 ls -la /etc/localtime 
 date
