@@ -1,6 +1,12 @@
 # PLCnext Utility Scripts
 
-This repository holds a collection of useful PLCnext related scripts.
+This repository holds a collection of useful PLCnext related scripts to diagnose or modify your PLCnext Controll settings.
+
+# Attention!
+Please keep in mind that some of these scripts should not be executed during runtime as these might have an impact on your application!
+Please always read the scripts before executing it on any device. Some scripts require individualised modifications.
+When in doubt please open an Issue here, at the www.PLCnext-Community.net or contact your local subsidiary for support.
+
 ## Compatibility
 Firmware Compatibility 2020 - 2021
 
