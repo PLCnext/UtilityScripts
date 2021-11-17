@@ -31,10 +31,24 @@ select opt in "${options[@]}"
 do
     case $opt in
         "SD Licence")               
-            echo "Restore Licence."
+            echo "Restoring Licence"        
+
+            CURRENT_SD_LICENCE=($(ls /media/rfs/externalsd/licence))
+            BACKUP_SD_LICENCE=($(tar -tf "${BackupLocation}" licence  | sed 's/licence\///' | sed -r '/^\s*$/d'))
+
+            echo "CURRENT SD LICENCE:  ${CURRENT_SD_LICENCE[@]}"
+            echo "BACKUP SD LICNENCE:  ${BACKUP_SD_LICENCE[@]}"
+            if [ ${CURRENT_SD_LICENCE[0]} != ${BACKUP_SD_LICENCE[1]} ] | [ ${CURRENT_SD_LICENCE[1]} != ${BACKUP_SD_LICENCE[0]} ]; then
+                ## This is not comparing the actuall licence but the randomly generated filename
+                ## is a pretty good indicator that the licence file does not belong to this device.
+                echo "####ATTENTION####"
+                echo "Backup differs from current device significantly"
+                echo "$CURRENT_SD_LICENCE != $BACKUP_SD_LICENCE"
+                echo "Are you sure this is the same Device this Backup was created from?"                           
+            fi
+
             echo "Restoring this backup might void an SD-Cards License if written to a different SD-Card it was created from."            
             read -r -p "Are you sure? [y/N] " response
-
             tar --same-owner -xvf "${BackupLocation}" -C "$TargetDirectory" licence && echo "Done restoring License"
         ;;
 
