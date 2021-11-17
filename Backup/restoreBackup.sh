@@ -35,7 +35,7 @@ do
             echo "Restoring this backup might void an SD-Cards License if written to a different SD-Card it was created from."            
             read -r -p "Are you sure? [y/N] " response
 
-            tar --same-owner -xf "${BackupLocation}" -C "$TargetDirectory" licence
+            tar --same-owner -xvf "${BackupLocation}" -C "$TargetDirectory" licence && echo "Done restoring License"
         ;;
 
         "DeviceData")
@@ -51,21 +51,21 @@ do
                 echo "####ATTENTION####"
                 echo "Backup SN differs from Device SN"
                 echo "$BACKUP_SERIAL_NUMBER != $CURRENT_SERIAL_NUMBER"
-                echo "Are you sure this is the same Device this Backup was created from?"
+                echo "Are you sure this is the same Device this Backup was created from?"                
             fi
 
-            read -r -p "Continue restoring backup to device [Yes/N] " response
-            tar --same-owner -xf "${BackupLocation}" -C "/etc" device_data       
+            read -r -p "Continue restoring backup to device [Yes/N]" response
+            tar --same-owner -xvf "${BackupLocation}" -C "/etc" device_data && echo "Done restoring DeviceData"
         ;;
 
         "PCWE")
             echo "Restore PCWE Folder from Backup."
-            tar --same-owner -xf "${BackupLocation}" -C "$TargetDirectory" upperdir/opt/plcnext/projects/PCWE      
+            tar --same-owner -xvf "${BackupLocation}" -C "$TargetDirectory" upperdir/opt/plcnext/projects/PCWE && echo "Done restoring PCWE"      
         ;;
 
         "Upperdir")
             echo "Restore Upperdir"
-            tar --same-owner -xf "${BackupLocation}" -C "$TargetDirectory" upperdir      
+            tar --same-owner -xvf "${BackupLocation}" -C "$TargetDirectory" upperdir && echo "Done restoring Upperdir"     
         ;;
 
         "Exit")               
