@@ -34,13 +34,27 @@ do
             echo "Restore Licence."
             echo "Restoring this backup might void an SD-Cards License if written to a different SD-Card it was created from."            
             read -r -p "Are you sure? [y/N] " response
+
             tar --same-owner -xf "${BackupLocation}" -C "$TargetDirectory" licence
         ;;
 
         "DeviceData")
-            echo "Restore DeviceData."
-            echo "Restoring this backup might destroy PLC data if written to a different PLC it was created from."  
-            read -r -p "Are you sure? [y/N] " response           
+            echo "Restoring DeviceData."
+            echo "Restoring this backup might destroy your PLC if written to a different PLC it was created from."
+            CURRENT_SERIAL_NUMBER=$(cat /etc/device_data/phoenixsign/production_data | grep "OEM_SERIAL=" | sed 's/;//' )
+            BACKUP_SERIAL_NUMBER=$(tar xf "${BackupLocation}" device_data/phoenixsign/production_data -O |  grep "OEM_SERIAL=" | sed 's/;//')
+
+            echo "CURRENT SN: $CURRENT_SERIAL_NUMBER"
+            echo "BACKUP SN: $BACKUP_SERIAL_NUMBER"
+        	
+            if [ $CURRENT_SERIAL_NUMBER != $BACKUP_SERIAL_NUMBER ]; then
+                echo "####ATTENTION####"
+                echo "Backup SN differs from Device SN"
+                echo "$BACKUP_SERIAL_NUMBER != $CURRENT_SERIAL_NUMBER"
+                echo "Are you sure this is the same Device this Backup was created from?"
+            fi
+
+            read -r -p "Continue restoring backup to device [Yes/N] " response
             tar --same-owner -xf "${BackupLocation}" -C "/etc" device_data       
         ;;
 
