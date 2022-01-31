@@ -5,18 +5,24 @@
 # * Licensed under the MIT. See LICENSE file in the project root for full license information.
 # *
 # ******************************************************************************
-
-##
-## All possible options for the backup.sh script
-##
+STORAGE_MODE="PCWE"
+###
+### Located on the SD
+###
 STORE_LICENCE=false     # SD card Licenses
 INSTALLED_LICENSE_FILES="licence"                                
 
+###
+### Located on InternalStorage
+###
 STORE_DEVICEDATA=false  # Production Data of PLC. 
-DEVICEDATA="device_data"                                       
+DEVICEDATA="etc/device_data"                                       
 
+###
+### Located on Upperdir
+###
 STORE_UNIX_PASSWORD_CHANGES=true    # Created root user, added groups etc.
-UNIX_PASSWORD_Changes=( "upperdir/etc/shadow" "upperdir/etc/gshadow" "upperdir/etc/group" ) # created root user or admin unix pw was chaged.
+UNIX_PASSWORD_Changes=( "/etc/shadow" "/etc/gshadow" "/etc/group" ) # created root user or admin unix pw was chaged.
 
 STORE_PLCnext_ETC=false    # All modifications done to the /etc/plcnext directory
 PLCnext_ETC="upperdir/etc/plcnext"                                
