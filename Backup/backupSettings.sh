@@ -50,4 +50,7 @@ STORE_ALL_CONFIG=false # Whole config directory
 CONFIG="upperdir/opt/plcnext/config"
 
 STORE_ALL_DATA=false # this directory holds mostly session dependend data like PIDs, FW update Status etc.
-DATA="upperdir/opt/plcnext/data"            
+DATA="upperdir/opt/plcnext/data"
+
+STORE_CONTAINER=false
+CONTAINER_ENGINE=podman

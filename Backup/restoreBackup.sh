@@ -9,6 +9,10 @@ CURRENT=$(pwd)
 TargetDirectory="$1"
 BackupLocation="$2"
 
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+## Set the directories for the backup
+. ${SCRIPT_DIR}/../Backup/backupSettings.sh
+
 if [ "$1" == "" ]; then
     echo "please add backup location as argument"
     echo "Example: 
@@ -26,7 +30,12 @@ tar -tvf "${BackupLocation}"
 
 echo 'Choose all the directories you wish to restore.'
 PS3="Select your choice: "
-options=("SD Licence" "DeviceData" "PCWE" "Upperdir" "Exit")
+options=("SD Licence" \
+"DeviceData" \
+"PCWE" \
+"Upperdir" \
+"Containers" \
+"Exit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -80,6 +89,21 @@ do
         "Upperdir")
             echo "Restore Upperdir"
             tar --same-owner -xvf "${BackupLocation}" -C "$TargetDirectory" upperdir && echo "Done restoring Upperdir"     
+        ;;
+
+        "Containers")
+            echo "Restoring Containers"
+            echo "This just restores the current state of the saved Container as an Image!"
+            echo "You still need to Setup the Container again after restoring this backup"
+            echo "podman run -v XX -p xxx ... "
+            tar --same-owner -xvf "${BackupLocation}" -C "$TargetDirectory" Containers && echo "Done restoring Container.tar"
+            CONTAINERS=($(ls $TargetDirectory/Containers))
+            for CONTAINER in "${CONTAINERS[@]}"
+            do
+                echo "Importing $CONTAINER"
+                $CONTAINER_ENGINE import $TargetDirectory/Containers/$CONTAINER  
+                rm $TargetDirectory/Containers/$CONTAINER                 
+            done && echo "Done"
         ;;
 
         "Exit")               

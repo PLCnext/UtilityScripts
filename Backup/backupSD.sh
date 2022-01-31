@@ -32,6 +32,7 @@ PS3="Select your choice: "
 options=("Upperdir" \
 "PCWE Project only" \
 "Directories specified by backupSettings.sh" \
+"Containers" \
 "Continue" \
 "Exit")
 select opt in "${options[@]}"
@@ -58,12 +59,7 @@ do
         #         STORE="Everything"
         #         echo "STORE = $STORE"         
         # ;;
-
-        # "Containers")
-        #         STORE="Everything"
-        #         echo "STORE = $STORE"         
-        # ;;
-
+        
         "Continue")
                 if [ "$STORE" == "" ]; then
                         echo "STORE = $STORE empty Exit Script"   
@@ -83,7 +79,15 @@ done
 
 echo 'Do you wish to add stored licenses and PLC device data to this backup?'
 PS3="Select your choice: "
-options=("Don't Store Licence" "Store Licence" "Don't Store DeviceData" "Store DeviceData" "Continue" "Exit")
+options=("Don't Store Licence" 
+"Store Licence" 
+"Don't Store DeviceData" 
+"Store DeviceData" 
+"Don't Store Containers"
+"Store Containers"
+"Continue" 
+"Exit" 
+)
 select opt in "${options[@]}"
 do
     case $opt in
@@ -103,13 +107,27 @@ do
                 STORE_DEVICEDATA=true
                 echo "STORE_DEVICEDATA = $STORE_DEVICEDATA"            
         ;;
+        "Store Containers")
+                STORE_CONTAINER=true
+                echo "STORE = $STORE"         
+         ;;
+        "Dont Store Containers")
+                STORE_CONTAINER=false
+                echo "STORE = $STORE"         
+         ;;
         "Continue")
                 if [ "$STORE_LICENCE" == "" ]; then
                         echo "STORE_LICENCE = $STORE_LICENCE empty. Exit Script."   
                 exit 1
                 fi
+
                 if [ "$STORE_DEVICEDATA" == "" ]; then
                         echo "STORE_DEVICEDATA = $STORE_DEVICEDATA empty. Exit Script."   
+                exit 1
+                fi
+
+                if [ "$STORE_CONTAINER" == "" ]; then
+                        echo "STORE_DEVICEDATA = $STORE_CONTAINER empty. Exit Script."   
                 exit 1
                 fi
                 break
@@ -143,9 +161,11 @@ then
         
         echo "STORE = $STORE" 
         case "$STORE" in
-        "Upperdir")                                                      
+        "Upperdir")
+                echo "Storing Upperdir"                                                      
                 tar -rpf ${StoreBackupAt}/backup-${DATE}.tar -C ${DATAPATH} upperdir && echo "Done"  
         ;;
+        
         "Changes")
                 echo -e "Store specified folders only:"
                 (set -o posix ; set) | grep "STORE" | grep "true"           
@@ -250,6 +270,26 @@ if $STORE_LICENCE; then
         else
                 echo "Storing licence has been skipped"
         fi
+fi
+
+if $STORE_CONTAINER; then             
+        echo "Storing Containers"
+        ## Get a list of all containers
+        CONTAINERS=($(podman container ls -aq))
+        mkdir ${DATAPATH}Containers
+        # Export Containers and add them to the backup.tar
+        for CONTAINER in "${CONTAINERS[@]}"
+        do
+                echo "Storing Container:$CONTAINER"
+                echo "This just saves the current state of the Container as an Image!"
+                echo "You still need to Setup the Container again when restoring this backup"
+                echo "podman run -v XX -p xxx ... "
+                ## Need to stop continers?                        
+                $CONTAINER_ENGINE export $CONTAINER --output "${DATAPATH}/Containers/$CONTAINER.tar"
+                tar -rpf ${StoreBackupAt}/backup-${DATE}.tar -C ${DATAPATH} "Containers/$CONTAINER.tar"
+                rm "${DATAPATH}/Containers/$CONTAINER.tar"
+        done && echo "Done"                
+        ;;
 fi
 
 if [ -f "${StoreBackupAt}/backup-${DATE}.tar" ]; then
