@@ -40,6 +40,9 @@ PLCnext_UM="upperdir/opt/plcnext/config/System/Um/"
 STORE_PLCnext_SYSTEM_SCM=true  # Service Manager changes to enable/disable System Features
 PLCnext_SCM="upperdir/opt/plcnext/config/System/Scm/"   
 
+STORE_PLCnext_SYSTEM_WATCHDOG=true  # Service Manager changes to enable/disable System Features
+PLCnext_WATCHDOG="upperdir/opt/plcnext/config/System/Watchdog/"   
+
 STORE_PLCnext_SECURITY=true     # Certificates IdentityStores and Truststores
 PLCnext_SECURITY="upperdir/opt/plcnext/Security"                          
 
@@ -58,7 +61,7 @@ SERVICES="upperdir/opt/plcnext/config/Services"
 # STORE_PLCNext_SERVICES_Spm
 # STORE_PLCNext_SERVICES_SpnsProxy
 # STORE_PLCNext_SERVICES_Syslog
-# STORE_PLCNext_SERVICES_Wcm
+# STORE_PLCNext_SERVICES_Wcm # Certificates and additional nginx location config
 # STORE_PLCnext_STORE_Licenses
 
 STORE_NETWORK=true # Store your custom IP Configuration

@@ -275,7 +275,11 @@ then
                                         STORE_PLCnext_SYSTEM_SCM=$(Toggle $STORE_PLCnext_SYSTEM_SCM)
                                         echo "STORE_PLCnext_SYSTEM_SCM = $STORE_PLCnext_SYSTEM_SCM" 
                                 ;;
-
+                                "Toggle store PLCnext_SYSTEM_WATCHDOG")  
+                                        echo "Behavior of PLC after Watchdog. Restart and RUN or STOP after a critical issue occured."
+                                        PLCnext_SYSTEM_WATCHDOG=$(Toggle $PLCnext_SYSTEM_WATCHDOG)
+                                        echo "PLCnext_SYSTEM_WATCHDOG = $PLCnext_SYSTEM_WATCHDOG" 
+                                ;;
                                 "Toggle store PLCnext_SECURITY")
                                         echo "Certificates IdentityStores and Truststores"
                                         STORE_PLCnext_SECURITY=$(Toggle $STORE_PLCnext_SECURITY)
@@ -520,6 +524,16 @@ case "$STORAGE_MODE" in
                         fi
                 fi
 
+                if $STORE_PLCnext_SYSTEM_WATCHDOG; 
+                then
+                        echo "Storing SYSTEM Watchdog Settings"
+                    
+                        if [ -d  ${SourceLocation}/${PLCnext_WATCHDOG} ] ;
+                        then
+                        BACKUPFILE_LIST+=( $(find ${SourceLocation}/${PLCnext_WATCHDOG}) )
+                        echo "Number of Entries:${#BACKUPFILE_LIST[@]}"
+                        fi
+                fi
                 if $STORE_PLCNext_SERVICES; 
                 then
                         echo  "Storing SERVICE Settings"                       
